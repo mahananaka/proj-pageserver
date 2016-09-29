@@ -84,6 +84,7 @@ def respond(sock):
     parts = request.split()
     if len(parts) > 1 and parts[0] == "GET":
     	reply = parseResponse(parts[1])
+    	print("\nreply dump: {}\n".format(reply))
         transmit(STATUS_OK, sock)
         transmit(CAT, sock)
     else:
