@@ -69,6 +69,7 @@ STATUS_OK = "HTTP/1.0 200 OK\n\n"
 STATUS_FORBIDDEN = "HTTP/1.0 403 Forbidden\n\n"
 STATUS_NOT_FOUND = "HTTP/1.0 404 Not Found\n\n"
 STATUS_NOT_IMPLEMENTED = "HTTP/1.0 401 Not Implemented\n\n"
+FORBIDDEN_REQUESTS = ["//","~",".."]
 
 def respond(sock):
     """
@@ -82,6 +83,7 @@ def respond(sock):
 
     parts = request.split()
     if len(parts) > 1 and parts[0] == "GET":
+    	reply = parts[1]
         transmit(STATUS_OK, sock)
         transmit(CAT, sock)
     else:
@@ -90,6 +92,19 @@ def respond(sock):
 
     sock.close()
     return
+
+def parseResponse(request):
+	"""
+	A proper request has been received, building response to the request
+	"""
+	for forbbiden in FORBIDDEN_REQUESTS:
+		if forbbiden in request:
+			return STATUS_FORBIDDEN
+
+
+	response = STATUS_OK + CAT
+	return response
+
 
 def transmit(msg, sock):
     """It might take several sends to get the whole message out"""
