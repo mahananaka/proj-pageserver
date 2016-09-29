@@ -168,7 +168,7 @@ def get_options():
     it worth the learning experience to try and create my 
     own argument.
     """
-    parser.add_argument("--dir","-d", dest="directory",
+    parser.add_argument("--dir","-d",  dest="directory",
                         help="Root directory that pages are located in; default is {}".format(CONFIG.PAGES_PATH),
                         type=str, default=CONFIG.PAGES_PATH)
     options = parser.parse_args()

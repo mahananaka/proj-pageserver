@@ -23,5 +23,5 @@ editing.
 #
 #
 PORT = 8000  # FIXME -- choose a random port number to avoid conflicts 
-
+PAGES_PATH = "/pages" # The directory that files to be served are located
 
