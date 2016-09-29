@@ -83,22 +83,22 @@ def respond(sock):
 
     parts = request.split()
     if len(parts) > 1 and parts[0] == "GET":
-            options = get_options()
-            path = options.directory
-            request = parts[1]
+        options = get_options()
+        path = options.directory
+        request = parts[1]
 
-            print("pre request: {}\n".format(request))
-            print("path: {}\n".format(path))
-            print("request substr: {}\n".format(request[:len(path)]))
+        print("pre request: {}\n".format(request))
+        print("path: {}\n".format(path))
+        print("request substr: {}\n".format(request[:len(path)]))
 
-            """
-            If the request isn't for files within the default directory add the default
-            path to the beggining of the request.
-            """
-            if request[:len(path)] != path: 
-                request = path+request
+        """
+        If the request isn't for files within the default directory add the default
+        path to the beggining of the request.
+        """
+        if request[:len(path)] != path: 
+            request = path+request
 
-            print("post request: {}\n".format(request))
+        print("post request: {}\n".format(request))
 
         reply_status = parseStatus(request)
         print("reply_status dump: {}\n".format(reply_status))
