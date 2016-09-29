@@ -96,7 +96,7 @@ def respond(sock):
         print("requestmod: {}\n".format(request[:len(path)-1] == path[2:]))
         if request[:len(path)] != path:
             request = path+request
-        else if request[:len(path)-1] == path[2:]
+        elif request[:len(path)-1] == path[2:]:
             request = "." + request
 
         reply_status = parseStatus(request)
