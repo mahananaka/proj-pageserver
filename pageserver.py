@@ -83,8 +83,8 @@ def respond(sock):
 
     parts = request.split()
     if len(parts) > 1 and parts[0] == "GET":
-    	reply = parseResponse(parts[1])
-    	print("\nreply dump: {}\n".format(reply))
+        reply = parseResponse(parts[1])
+        print("\nreply dump: {}\n".format(reply))
         transmit(STATUS_OK, sock)
         transmit(CAT, sock)
     else:
@@ -95,15 +95,15 @@ def respond(sock):
     return
 
 def parseResponse(request):
-	"""
-	A proper request has been received, building response to the request
-	"""
-	for forbbiden in FORBIDDEN_REQUESTS:
-		if forbbiden in request:
-			return STATUS_FORBIDDEN
+    """
+    A proper request has been received, building response to the request
+    """
+    for forbbiden in FORBIDDEN_REQUESTS:
+        if forbbiden in request:
+            return STATUS_FORBIDDEN
 
-	response = STATUS_OK + CAT
-	return response
+    response = STATUS_OK + CAT
+    return response
 
 
 def transmit(msg, sock):
