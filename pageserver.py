@@ -83,7 +83,7 @@ def respond(sock):
 
     parts = request.split()
     if len(parts) > 1 and parts[0] == "GET":
-    	reply = parts[1]
+    	reply = parseResponse(parts[1])
         transmit(STATUS_OK, sock)
         transmit(CAT, sock)
     else:
@@ -100,7 +100,6 @@ def parseResponse(request):
 	for forbbiden in FORBIDDEN_REQUESTS:
 		if forbbiden in request:
 			return STATUS_FORBIDDEN
-
 
 	response = STATUS_OK + CAT
 	return response
