@@ -16,7 +16,9 @@
 import CONFIG    # Configuration options. Create by editing CONFIG.base.py
 import argparse  # Command line options (may override some configuration options)
 import socket    # Basic TCP/IP communication on the internet
-import _thread   # Response computation runs concurrently with main program 
+import _thread   # Response computation runs concurrently with main program
+import os.path   # Used to check if requested file exists on server.
+
 
 def listen(portnum):
     """
@@ -125,7 +127,7 @@ def parseStatus(request):
     After this point the http request is formatted correctly and not mallicous.
     Will attempt to locate the requested file and deliver it.
     """
-    if os.access(request,os.R_OK):
+    if os.path.isfile(request):
         return STATUS_OK
     else:
         return STATUS_NOT_FOUND
@@ -171,6 +173,7 @@ def get_options():
     parser.add_argument("--dir","-d",  dest="directory",
                         help="Root directory that pages are located in; default is {}".format(CONFIG.PAGES_PATH),
                         type=str, default=CONFIG.PAGES_PATH)
+
     options = parser.parse_args()
     if options.port <= 1000:
         print("Warning: Ports 0..1000 are reserved by the operating system")
