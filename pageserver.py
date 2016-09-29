@@ -95,10 +95,10 @@ def respond(sock):
         """
         print("requestmod: {}\n".format(request[:len(path)-1]))
         print("requestmod2: {}\n".format(path[1:]))
-        if request[:len(path)] != path:
-            request = path+request
-        elif request[:len(path)-1] == path[1:]:
+        if request[:len(path)-1] == path[1:]:
             request = "." + request
+        elif request[:len(path)] != path:
+            request = path+request
 
         reply_status = parseStatus(request)
         print("reply_status dump: {}\n".format(reply_status))
