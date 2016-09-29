@@ -17,7 +17,7 @@ import CONFIG    # Configuration options. Create by editing CONFIG.base.py
 import argparse  # Command line options (may override some configuration options)
 import socket    # Basic TCP/IP communication on the internet
 import _thread   # Response computation runs concurrently with main program
-import os.path   # Used to check if requested file exists on server.
+import os        # Used to check if requested file exists on server.
 
 
 def listen(portnum):
@@ -93,8 +93,11 @@ def respond(sock):
         If the request isn't for files within the default directory add the default
         path to the beggining of the request.
         """
-        if request[:len(path)] != path: 
+        print("requestmod: {}\n".format(request[:len(path)-1] == path[2:]))
+        if request[:len(path)] != path:
             request = path+request
+        else if request[:len(path)-1] == path[2:]
+            request = "." + request
 
         reply_status = parseStatus(request)
         print("reply_status dump: {}\n".format(reply_status))
