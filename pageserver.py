@@ -94,10 +94,10 @@ def respond(sock):
         path to the beggining of the request.
         """
         print("requestmod: {}\n".format(request[:len(path)-1]))
-        print("requestmod2: {}\n".format(path[2:]))
+        print("requestmod2: {}\n".format(path[1:]))
         if request[:len(path)] != path:
             request = path+request
-        elif request[:len(path)-1] == path[2:]:
+        elif request[:len(path)-1] == path[1:]:
             request = "." + request
 
         reply_status = parseStatus(request)
