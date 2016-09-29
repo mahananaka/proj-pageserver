@@ -89,18 +89,12 @@ def respond(sock):
         path = options.directory
         request = parts[1]
 
-        print("pre request: {}\n".format(request))
-        print("path: {}\n".format(path))
-        print("request substr: {}\n".format(request[:len(path)]))
-
         """
         If the request isn't for files within the default directory add the default
         path to the beggining of the request.
         """
         if request[:len(path)] != path: 
             request = path+request
-
-        print("post request: {}\n".format(request))
 
         reply_status = parseStatus(request)
         print("reply_status dump: {}\n".format(reply_status))
@@ -127,6 +121,8 @@ def parseStatus(request):
     After this point the http request is formatted correctly and not mallicous.
     Will attempt to locate the requested file and deliver it.
     """
+    print("Request dump: {}\n".format(request))
+    print("isFile(): {}\n".format(os.path.isfile(request)))
     if os.path.isfile(request):
         return STATUS_OK
     else:
