@@ -127,7 +127,7 @@ def parseStatus(request):
     """
     if os.access(request,os.R_OK):
         return STATUS_OK
-    else
+    else:
         return STATUS_NOT_FOUND
 
 def readFile(request):
