@@ -93,7 +93,8 @@ def respond(sock):
         If the request isn't for files within the default directory add the default
         path to the beggining of the request.
         """
-        print("requestmod: {}\n".format(request[:len(path)-1] == path[2:]))
+        print("requestmod: {}\n".format(request[:len(path)-1]))
+        print("requestmod2: {}\n".format(path[2:]))
         if request[:len(path)] != path:
             request = path+request
         elif request[:len(path)-1] == path[2:]:
