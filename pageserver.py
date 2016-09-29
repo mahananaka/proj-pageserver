@@ -83,10 +83,28 @@ def respond(sock):
 
     parts = request.split()
     if len(parts) > 1 and parts[0] == "GET":
-        reply = parseResponse(parts[1])
-        print("\nreply dump: {}\n".format(reply))
-        transmit(STATUS_OK, sock)
-        transmit(CAT, sock)
+            options = get_options()
+            path = options.directory
+            request = parts[1]
+
+            print("pre request: {}\n".format(request))
+            print("path: {}\n".format(path))
+            print("request substr: {}\n".format(request[:len(path)]))
+
+            """
+            If the request isn't for files within the default directory add the default
+            path to the beggining of the request.
+            """
+            if request[:len(path)] != path: 
+                request = path+request
+
+            print("post request: {}\n".format(request))
+
+        reply_status = parseStatus(request)
+        print("reply_status dump: {}\n".format(reply_status))
+        transmit(reply_status, sock)
+        if reply_status == STATUS_OK:
+            transmit(readFile(request), sock)
     else:
         transmit(STATUS_NOT_IMPLEMENTED, sock)        
         transmit("\nI don't handle this request: {}\n".format(request), sock)
@@ -94,16 +112,30 @@ def respond(sock):
     sock.close()
     return
 
-def parseResponse(request):
+def parseStatus(request):
     """
-    A proper request has been received, building response to the request
+    A proper GET request has been received, building response to the request 
+    returns string containing the propper http response status.
     """
     for forbbiden in FORBIDDEN_REQUESTS:
         if forbbiden in request:
             return STATUS_FORBIDDEN
 
-    response = STATUS_OK + CAT
-    return response
+    """
+    After this point the http request is formatted correctly and not mallicous.
+    Will attempt to locate the requested file and deliver it.
+    """
+    if os.access(request,os.R_OK):
+        return STATUS_OK
+    else
+        return STATUS_NOT_FOUND
+
+def readFile(request):
+    """
+    Read the reqested file to be sent to the requestor.
+    """
+    reply = CAT
+    return reply
 
 
 def transmit(msg, sock):
@@ -129,6 +161,16 @@ def get_options():
     parser.add_argument("--port", "-p",  dest="port", 
                         help="Port to listen on; default is {}".format(CONFIG.PORT),
                         type=int, default=CONFIG.PORT)
+    """
+    Added argument for passing a root directory that files 
+    to serve are located within. I did this to remove the
+    hardcoded path and because I'm new to python so I felt
+    it worth the learning experience to try and create my 
+    own argument.
+    """
+    parser.add_argument("--dir","-d", dest="directory",
+                        help="Root directory that pages are located in; default is {}".format(CONFIG.PAGES_PATH),
+                        type=str, default=CONFIG.PAGES_PATH)
     options = parser.parse_args()
     if options.port <= 1000:
         print("Warning: Ports 0..1000 are reserved by the operating system")

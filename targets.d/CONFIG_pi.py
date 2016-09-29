@@ -22,4 +22,4 @@ targets.d, and selecting one with ./configure
 # between 5000 and 8000 has a pretty good chance of being avaiable.
 #
 PORT = 8000  # A common "non-privileged" stand-in for privileged port 80
-
+PAGES_PATH = "/pages"
