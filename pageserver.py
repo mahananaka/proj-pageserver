@@ -93,8 +93,6 @@ def respond(sock):
         If the request isn't for files within the default directory add the default
         path to the beggining of the request.
         """
-        print("requestmod: {}\n".format(request[:len(path)-1]))
-        print("requestmod2: {}\n".format(path[1:]))
         if request[:len(path)-1] == path[1:]:
             request = "." + request
         elif request[:len(path)] != path:
@@ -136,7 +134,9 @@ def readFile(request):
     """
     Read the reqested file to be sent to the requestor.
     """
-    reply = CAT
+    with open(request, 'r') as file:
+        reply = file.read()
+
     return reply
 
 
