@@ -28,4 +28,5 @@ A "getting started" project for CIS 322, software engineering 1 at University of
   * It will route requests to the desired page if it exists within a default directory.
   * If the URL contains potentially dangerous character sequences it will return a 403 Forbidden page.
   * If the file requested could not be found it will return a 404 error.
-  ### Author: Jared Paeschke , jpaeschk@uoregon.edu ###
+  
+### Author: Jared Paeschke , jpaeschk@uoregon.edu ###
