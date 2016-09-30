@@ -10,7 +10,10 @@
   Currently this program always serves an ascii graphic of a cat.
   Change it to serve files if they end with .html or .css, and are
   located in ./pages  (where '.' is the directory from which this
-  program is run).  
+  program is run).
+  ---------------
+  Modification made to fork http://github.com/UO-CIS-322/proj-pageserver.py
+  by Jared Paeschke for assignment in CIS322 Fall 2016.
 """
 
 import CONFIG    # Configuration options. Create by editing CONFIG.base.py
@@ -71,6 +74,7 @@ STATUS_OK = "HTTP/1.0 200 OK\n\n"
 STATUS_FORBIDDEN = "HTTP/1.0 403 Forbidden\n\n"
 STATUS_NOT_FOUND = "HTTP/1.0 404 Not Found\n\n"
 STATUS_NOT_IMPLEMENTED = "HTTP/1.0 401 Not Implemented\n\n"
+## Added some more globals
 FORBIDDEN_REQUESTS = ["//","~",".."]
 PAGE_NOT_FOUND = "/404.html"
 PAGE_FORBIDDEN = "/403.html"
@@ -87,20 +91,27 @@ def respond(sock):
     parts = request.split()
     if len(parts) > 1 and parts[0] == "GET":
         options = get_options()
-        path = options.directory
-        request = parts[1]
+        path = options.directory #Get the default directory for pages from CONFIG
+        request = parts[1] #This part of the split is the requested file
 
         """
         If the request isn't for files within the default directory add the default
         path to the beggining of the request.
         """
-        if request[:len(path)-1] == path[1:]:
-            request = "." + request
-        elif request[:len(path)] != path:
-            request = path+request
+        if request[:len(path)-1] == path[1:]:   #request needs to start with "." or it doesn't begin looking in directory of pageserver.py
+            request = "."+request               #Add a . to the request so it takes form such as "./pages/trivia.html"
+        elif request[:len(path)] != path:       #request isn't looking in default directory
+            request = path+request              #change the request to start in default directory
 
+        """
+        Parse the request and get a html status code to reply with
+        """
         reply_status = parseStatus(request)
         transmit(reply_status, sock)
+
+        """
+        Send the appropriate file to end user depending on reply status.
+        """
         if reply_status == STATUS_OK:
             transmit(readFile(request), sock)
         elif reply_status == STATUS_NOT_FOUND:
@@ -119,15 +130,15 @@ def parseStatus(request):
     A proper GET request has been received, building response to the request 
     returns string containing the propper http response status.
     """
-    for forbbiden in FORBIDDEN_REQUESTS:
+    for forbbiden in FORBIDDEN_REQUESTS:    #check the request against all the forbidden characters
         if forbbiden in request:
-            return STATUS_FORBIDDEN
+            return STATUS_FORBIDDEN         #found potentially mallicious request
 
     """
     After this point the http request is formatted correctly and not mallicous.
     Will attempt to locate the requested file and deliver it.
     """
-    if os.path.isfile(request):
+    if os.path.isfile(request): #searching for request
         return STATUS_OK
     else:
         return STATUS_NOT_FOUND
@@ -137,7 +148,7 @@ def readFile(request):
     Read the reqested file to be sent to the requestor.
     """
     with open(request, 'r') as file:
-        reply = file.read()
+        reply = file.read()             #storing content of file into reply
 
     return reply
 
