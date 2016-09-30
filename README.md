@@ -22,9 +22,10 @@ A "getting started" project for CIS 322, software engineering 1 at University of
   number above 1000 (rather than port 80 that a privileged web server would use)
 
 ### Assignment ###
-*What will this tiny web server do?
-  *This server will except http requests over an unpriveledged port.
-  *It will route requests to the desired page if it exists within a default directory.
-  *If the URL contains potentially dangerous character sequences it will return a 403 Forbidden page.
-  *If the file requested could not be found it will return a 404 error.
+
+* What will this tiny web server do?
+  * This server will except http requests over an unpriveledged port.
+  * It will route requests to the desired page if it exists within a default directory.
+  * If the URL contains potentially dangerous character sequences it will return a 403 Forbidden page.
+  * If the file requested could not be found it will return a 404 error.
   ### Author: Jared Paeschke , jpaeschk@uoregon.edu ###
