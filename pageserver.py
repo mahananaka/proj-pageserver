@@ -72,6 +72,8 @@ STATUS_FORBIDDEN = "HTTP/1.0 403 Forbidden\n\n"
 STATUS_NOT_FOUND = "HTTP/1.0 404 Not Found\n\n"
 STATUS_NOT_IMPLEMENTED = "HTTP/1.0 401 Not Implemented\n\n"
 FORBIDDEN_REQUESTS = ["//","~",".."]
+PAGE_NOT_FOUND = "/404.html"
+PAGE_FORBIDDEN = "/403.html"
 
 def respond(sock):
     """
@@ -81,8 +83,7 @@ def respond(sock):
     sent = 0
     request = sock.recv(1024)  # We accept only short requests
     request = str(request, encoding='utf-8', errors='strict')
-    print("\nRequest was {}\n".format(request))
-
+    
     parts = request.split()
     if len(parts) > 1 and parts[0] == "GET":
         options = get_options()
@@ -99,10 +100,13 @@ def respond(sock):
             request = path+request
 
         reply_status = parseStatus(request)
-        print("reply_status dump: {}\n".format(reply_status))
         transmit(reply_status, sock)
         if reply_status == STATUS_OK:
             transmit(readFile(request), sock)
+        elif reply_status == STATUS_NOT_FOUND:
+            transmit(readFile("." + path + PAGE_NOT_FOUND))
+        elif replay_status == STATUS_FORBIDDEN:
+            transmit(readFile("." + path + PAGE_FORBIDDEN))
     else:
         transmit(STATUS_NOT_IMPLEMENTED, sock)        
         transmit("\nI don't handle this request: {}\n".format(request), sock)
@@ -123,8 +127,6 @@ def parseStatus(request):
     After this point the http request is formatted correctly and not mallicous.
     Will attempt to locate the requested file and deliver it.
     """
-    print("Request dump: {}\n".format(request))
-    print("isFile(): {}\n".format(os.path.isfile(request)))
     if os.path.isfile(request):
         return STATUS_OK
     else:
@@ -146,7 +148,6 @@ def transmit(msg, sock):
     while sent < len(msg):
         buff = bytes( msg[sent: ], encoding="utf-8")
         sent += sock.send( buff )
-    
 
 ###
 #
