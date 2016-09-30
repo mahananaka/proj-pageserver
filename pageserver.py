@@ -104,9 +104,9 @@ def respond(sock):
         if reply_status == STATUS_OK:
             transmit(readFile(request), sock)
         elif reply_status == STATUS_NOT_FOUND:
-            transmit(readFile(path + PAGE_NOT_FOUND))
+            transmit(readFile(path + PAGE_NOT_FOUND, sock))
         elif replay_status == STATUS_FORBIDDEN:
-            transmit(readFile(path + PAGE_FORBIDDEN))
+            transmit(readFile(path + PAGE_FORBIDDEN, sock))
     else:
         transmit(STATUS_NOT_IMPLEMENTED, sock)        
         transmit("\nI don't handle this request: {}\n".format(request), sock)
